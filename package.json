@@ -1,0 +1,32 @@
+{
+  "name": "setup-nucleus-cli-action",
+  "version": "0.0.1",
+  "description": "Setup Nucleus CLI for Github Actions",
+  "main": "dist/src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nucleuscloud/setup-nucleus-cli-action.git"
+  },
+  "author": "Nucleus",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/nucleuscloud/setup-nucleus-cli-action/issues"
+  },
+  "homepage": "https://github.com/nucleuscloud/setup-nucleus-cli-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.9.1",
+    "@actions/github": "^5.0.3",
+    "@actions/io": "^1.1.2",
+    "@actions/tool-cache": "^2.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "jest": "^29.0.1",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -1,0 +1,14 @@
+name: Nucleus Cloud - Setup Nucleus CLI
+description: Sets up Nucleus CLI in your Github Actions workflow.
+author: Nucleus Cloud Corp
+inputs:
+  nucleus_version:
+    description: The version of Nucleus CLI to install.
+    default: '0.0.24'
+    required: false
+runs:
+  using: node16
+  main: dist/src/index.js
+branding:
+  color: blue
+  icon: terminal
