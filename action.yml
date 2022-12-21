@@ -1,0 +1,10 @@
+name: setup-nucleus-cli
+description: Setup Nucleus CLI, on GitHub Actions runners
+inputs:
+  version:
+    description: Version of Nucleus CLI to install
+    required: false
+    default: v0.0.25
+runs:
+  using: node12
+  main: dist/index.js
