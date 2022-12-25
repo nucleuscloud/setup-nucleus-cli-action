@@ -83,17 +83,13 @@ function mapArch(arch) {
 }
 // os in [darwin, linux, win32...] (https://nodejs.org/api/os.html#os_os_platform)
 // return value in [darwin, linux, windows]
-function mapOS(os) {
+function mapOS(ops) {
     const mappings = {
         darwin: 'darwin',
         win32: 'windows'
     };
-    return mappings[os] || os;
+    return mappings[ops] || ops;
 }
-// nucleus_0.0.25_darwin_amd64.tar.gz
-// nucleus_0.0.25_windows_386.tar.gz
-// gh_2.20.2_linux_amd64.tar.gz
-// gh_2.20.2_windows_386.zip
 function getDownloadUrl(version) {
     const platform = os_1.default.platform();
     const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os_1.default.arch())}`;

@@ -26,6 +26,6 @@ export function getDownloadUrl(version: string): string{
   const platform = os.platform();
   const filename = `nucleus_${ version }_${ mapOS(platform) }_${ mapArch(os.arch()) }`;
   const extension = 'tar.gz';
-  return `https://github.com/cli/cli/releases/download/v${ version }/${ filename }.${ extension }`;
+  return `https://github.com/nucleuscloud/cli/releases/download/${ version }/${ filename }.${ extension }`;
 }
 
