@@ -20,5 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
+        with:
+          version: 0.0.26
+          logout: false
       - name: 'Use nucleus CLI'
         run: 'nucleus -h'

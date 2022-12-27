@@ -50,7 +50,7 @@ function run() {
             }
             const clientId = core.getInput('client_id');
             const clientSecret = core.getInput('client_secret');
-            if (clientSecret !== "") {
+            if (clientSecret !== '') {
                 core.setSecret(clientSecret);
             }
             const shouldLogout = core.getBooleanInput('logout');
