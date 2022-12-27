@@ -8,9 +8,6 @@ export async function run(): Promise<{version?: string}> {
   try {
     // Get version of tool to be installed
     const version: string = core.getInput('version')
-    if (!version) {
-      core.setFailed('Nucleus CLI version missing')
-    }
     const clientId: string = core.getInput('client_id')
     const clientSecret: string = core.getInput('client_secret')
     if (clientSecret !== '') {
@@ -22,7 +19,7 @@ export async function run(): Promise<{version?: string}> {
 
     core.info(`Downloading Nucleus CLI`)
     // Download the specific version of the tool, e.g. as a tarball
-    const pathToTarball = await tc.downloadTool(getDownloadUrl(version))
+    const pathToTarball = await tc.downloadTool(await getDownloadUrl(version))
 
     // Extract the tarball onto the runner
     const pathToCLI = await tc.extractTar(pathToTarball)

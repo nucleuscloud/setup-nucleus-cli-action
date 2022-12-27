@@ -23,7 +23,51 @@ function mapOS(ops: string): string {
   return mappings[ops] || ops
 }
 
-export function getDownloadUrl(version: string): string {
+interface GithubReleaseResponse {
+  tag_name: string
+}
+
+export async function getDownloadUrl(version?: string): Promise<string> {
+  if (!version || version === '' || version === 'latest') {
+    core.info('Necleus CLI version not set. Getting latest.')
+    const args: string[] = [
+      'api',
+      '-H "Accept: application/vnd.github+json"',
+      '/repos/nucleuscloud/cli/releases/latest'
+    ]
+    try {
+      let output = ''
+      let error = ''
+
+      const options = {
+        listeners: {
+          stdout: (data: Buffer) => {
+            output += data.toString()
+          },
+          stderr: (data: Buffer) => {
+            error += data.toString()
+          }
+        },
+        cwd: './lib'
+      }
+      await exec.getExecOutput('gh', args, options)
+      if (error !== '') {
+        core.setFailed('Failed to get latest Nucleus CLI release')
+      }
+      const githubRelease: GithubReleaseResponse = JSON.parse(output)
+      const latestVersion = githubRelease.tag_name
+      // eslint-disable-next-line no-console
+      console.log(JSON.stringify(githubRelease, undefined, 2))
+      const platform = os.platform()
+      const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(
+        os.arch()
+      )}`
+      const extension = 'tar.gz'
+      return `https://github.com/nucleuscloud/cli/releases/download/${latestVersion}/${filename}.${extension}`
+    } catch (err) {
+      core.setFailed('Failed to get download latest Nucleus CLI')
+    }
+  }
   const platform = os.platform()
   const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os.arch())}`
   const extension = 'tar.gz'

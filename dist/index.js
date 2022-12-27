@@ -45,9 +45,6 @@ function run() {
         try {
             // Get version of tool to be installed
             const version = core.getInput('version');
-            if (!version) {
-                core.setFailed('Nucleus CLI version missing');
-            }
             const clientId = core.getInput('client_id');
             const clientSecret = core.getInput('client_secret');
             if (clientSecret !== '') {
@@ -57,7 +54,7 @@ function run() {
             stateHelper.setLogout(shouldLogout);
             core.info(`Downloading Nucleus CLI`);
             // Download the specific version of the tool, e.g. as a tarball
-            const pathToTarball = yield tc.downloadTool((0, util_1.getDownloadUrl)(version));
+            const pathToTarball = yield tc.downloadTool(yield (0, util_1.getDownloadUrl)(version));
             // Extract the tarball onto the runner
             const pathToCLI = yield tc.extractTar(pathToTarball);
             // Expose the tool by adding it to the PATH
@@ -191,10 +188,50 @@ function mapOS(ops) {
     return mappings[ops] || ops;
 }
 function getDownloadUrl(version) {
-    const platform = os_1.default.platform();
-    const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os_1.default.arch())}`;
-    const extension = 'tar.gz';
-    return `https://github.com/nucleuscloud/cli/releases/download/v${version}/${filename}.${extension}`;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!version || version === '' || version === 'latest') {
+            core.info('Necleus CLI version not set. Getting latest.');
+            const args = [
+                'api',
+                '-H "Accept: application/vnd.github+json"',
+                '/repos/nucleuscloud/cli/releases/latest'
+            ];
+            try {
+                let output = '';
+                let error = '';
+                const options = {
+                    listeners: {
+                        stdout: (data) => {
+                            output += data.toString();
+                        },
+                        stderr: (data) => {
+                            error += data.toString();
+                        }
+                    },
+                    cwd: './lib'
+                };
+                yield exec.getExecOutput('gh', args, options);
+                if (error !== "") {
+                    core.setFailed("Failed to get latest Nucleus CLI release");
+                }
+                const githubRelease = JSON.parse(output);
+                const latestVersion = githubRelease.tag_name;
+                // eslint-disable-next-line no-console
+                console.log(JSON.stringify(githubRelease, undefined, 2));
+                const platform = os_1.default.platform();
+                const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os_1.default.arch())}`;
+                const extension = 'tar.gz';
+                return `https://github.com/nucleuscloud/cli/releases/download/${latestVersion}/${filename}.${extension}`;
+            }
+            catch (err) {
+                core.setFailed('Failed to get download latest Nucleus CLI');
+            }
+        }
+        const platform = os_1.default.platform();
+        const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os_1.default.arch())}`;
+        const extension = 'tar.gz';
+        return `https://github.com/nucleuscloud/cli/releases/download/v${version}/${filename}.${extension}`;
+    });
 }
 exports.getDownloadUrl = getDownloadUrl;
 function login(clientId, clientSecret) {
