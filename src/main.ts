@@ -44,7 +44,7 @@ async function post(): Promise<void> {
 
 
 const isPost = !!core.getState('isPost')
-if (!isPost) {
+if (isPost) {
   core.saveState('isPost', 'true');
 }
 
