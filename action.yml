@@ -4,7 +4,7 @@ inputs:
   version:
     description: Version of Nucleus CLI to install
     required: false
-    default: v0.0.25
+    default: 0.0.26
   client_id:
     description: Client id for Nucleus login
     required: false

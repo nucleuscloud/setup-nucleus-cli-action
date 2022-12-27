@@ -31,7 +31,7 @@ jobs:
       - name: Download Nucleus CLI
         uses: nucleuscloud/setup-nucleus-cli-action@v1
         with:
-          version: 0.0.25
+          version: 0.0.26
 ```
 
 Set up a Nucleus service account in order to authenticate against Nucleus CLI.
@@ -51,7 +51,7 @@ jobs:
       - name: Download Nucleus CLI & Login
         uses: nucleuscloud/setup-nucleus-cli-action@v1
         with:
-          version: 0.0.25
+          version: 0.0.26
           client_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
 ```
