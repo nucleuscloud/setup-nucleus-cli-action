@@ -1,8 +1,7 @@
 import * as core from '@actions/core'
 
-// export const IsPost = !!process.env['STATE_isPost']
 export const IsPost = !!core.getState('isPost')
-export const Logout = /true/i.test(process.env['STATE_logout'] || '')
+export const Logout = /true/i.test(core.getState('logout') || '')
 
 export function setLogout(logout: boolean): void {
   core.saveState('logout', logout)
