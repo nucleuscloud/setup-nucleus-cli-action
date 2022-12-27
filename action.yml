@@ -5,6 +5,12 @@ inputs:
     description: Version of Nucleus CLI to install
     required: false
     default: v0.0.25
+  client_id:
+    description: Client id for Nucleus login
+    required: false
+  client_secret:
+    description: Client secret for Nucleus login
+    required: false
 runs:
   using: node16
   main: dist/index.js

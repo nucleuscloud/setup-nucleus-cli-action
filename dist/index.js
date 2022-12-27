@@ -44,12 +44,16 @@ function run() {
         try {
             // Get version of tool to be installed
             const version = core.getInput('version');
+            const clientId = core.getInput('client_id');
+            const clientSecret = core.getInput('client_secret');
+            core.info(`Downloading Nucleus CLI`);
             // Download the specific version of the tool, e.g. as a tarball
             const pathToTarball = yield tc.downloadTool((0, util_1.getDownloadUrl)(version));
             // Extract the tarball onto the runner
             const pathToCLI = yield tc.extractTar(pathToTarball);
             // Expose the tool by adding it to the PATH
             core.addPath(pathToCLI);
+            yield (0, util_1.login)(clientId, clientSecret);
             return { version };
         }
         catch (error) {
@@ -61,7 +65,6 @@ function run() {
 }
 exports.run = run;
 run();
-// module.exports = run;
 
 
 /***/ }),
@@ -71,11 +74,41 @@ run();
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDownloadUrl = void 0;
+exports.login = exports.getDownloadUrl = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
 const os_1 = __importDefault(__nccwpck_require__(2087));
 // arch in [arm, x32, x64...] (https://nodejs.org/api/os.html#os_os_arch)
 // return value in [amd64, 386, arm]
@@ -102,6 +135,30 @@ function getDownloadUrl(version) {
     return `https://github.com/nucleuscloud/cli/releases/download/v${version}/${filename}.${extension}`;
 }
 exports.getDownloadUrl = getDownloadUrl;
+function login(clientId, clientSecret) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!clientId || !clientSecret) {
+            core.info(`Missing client id and client secret. Skipping login.`);
+            return;
+        }
+        const loginArgs = ['login', '--service-account'];
+        loginArgs.push('--client-id', clientId);
+        core.info(`Logging into Nucleus`);
+        try {
+            yield exec
+                .getExecOutput('nucleus', loginArgs, {
+                ignoreReturnCode: true,
+                silent: true,
+                input: Buffer.from(clientSecret)
+            });
+            core.info(`Login Succeeded!`);
+        }
+        catch (err) {
+            core.error(`Login Failed!`);
+        }
+    });
+}
+exports.login = login;
 
 
 /***/ }),

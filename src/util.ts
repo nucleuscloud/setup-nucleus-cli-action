@@ -1,3 +1,5 @@
+import * as core from '@actions/core'
+import * as exec from '@actions/exec'
 import os from 'os'
 
 // arch in [arm, x32, x64...] (https://nodejs.org/api/os.html#os_os_arch)
@@ -25,4 +27,30 @@ export function getDownloadUrl(version: string): string {
   const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os.arch())}`
   const extension = 'tar.gz'
   return `https://github.com/nucleuscloud/cli/releases/download/v${version}/${filename}.${extension}`
+}
+
+export async function login(
+  clientId: string,
+  clientSecret: string
+): Promise<void> {
+  if (!clientId || !clientSecret) {
+    core.info(`Missing client id and client secret. Skipping login.`)
+    return
+  }
+
+  const loginArgs: string[] = ['login', '--service-account']
+  loginArgs.push('--client-id', clientId)
+
+  core.info(`Logging into Nucleus`)
+
+  try {
+    await exec.getExecOutput('nucleus', loginArgs, {
+      ignoreReturnCode: true,
+      silent: true,
+      input: Buffer.from(clientSecret)
+    })
+    core.info(`Login Succeeded!`)
+  } catch (err) {
+    core.error(`Login Failed!`)
+  }
 }
