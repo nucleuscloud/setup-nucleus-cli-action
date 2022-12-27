@@ -54,3 +54,17 @@ export async function login(
     core.setFailed("Failed to login");
   }
 }
+
+
+export async function logout(): Promise<void> {
+  const logoutArgs: string[] = ['logout', '--service-account']
+
+  core.info(`Loggint out of Nucleus`)
+
+  try {
+    await exec.getExecOutput('nucleus', logoutArgs)
+    core.info(`Logout Succeeded!`)
+  } catch (err) {
+    core.setFailed("Failed to logout");
+  }
+}

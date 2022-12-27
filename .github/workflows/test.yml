@@ -26,5 +26,3 @@ jobs:
           client_secret: ${{ secrets.CLIENT_SECRET }}
       - name: 'Use nucleus CLI'
         run: 'nucleus -h'
-      - name: 'Logout Nucleus CLI'
-        run: 'nucleus logout'

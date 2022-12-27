@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
-import {getDownloadUrl, login} from './util'
+import {getDownloadUrl, login, logout} from './util'
 
 export async function run(): Promise<{version?: string}> {
   try {
@@ -12,6 +12,9 @@ export async function run(): Promise<{version?: string}> {
     const clientId: string = core.getInput('client_id')
     const clientSecret: string = core.getInput('client_secret')
     core.setSecret(clientSecret)
+
+    const shouldLogout: boolean = core.getBooleanInput('logout')
+    core.saveState('logout', shouldLogout);
 
     core.info(`Downloading Nucleus CLI`)
     // Download the specific version of the tool, e.g. as a tarball
@@ -31,4 +34,22 @@ export async function run(): Promise<{version?: string}> {
   return {}
 }
 
-run()
+async function post(): Promise<void> {
+  const shouldLogout = !!core.getState('logout')
+  if (!shouldLogout) {
+    return;
+  }
+  await logout();
+}
+
+
+const isPost = !!core.getState('isPost')
+if (!isPost) {
+  core.saveState('isPost', 'true');
+}
+
+if (!isPost) {
+    run()
+} else {
+    post()
+}
