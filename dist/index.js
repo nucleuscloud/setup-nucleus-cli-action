@@ -116,7 +116,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.setLogout = exports.Logout = exports.IsPost = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-exports.IsPost = !!process.env['STATE_isPost'];
+// export const IsPost = !!process.env['STATE_isPost']
+exports.IsPost = !!core.getState('isPost');
 exports.Logout = /true/i.test(process.env['STATE_logout'] || '');
 function setLogout(logout) {
     core.saveState('logout', logout);
@@ -221,7 +222,7 @@ exports.login = login;
 function logout() {
     return __awaiter(this, void 0, void 0, function* () {
         const logoutArgs = ['logout', '--service-account'];
-        core.info(`Loggint out of Nucleus`);
+        core.info(`Logging out of Nucleus`);
         try {
             yield exec.getExecOutput('nucleus', logoutArgs);
             core.info(`Logout Succeeded!`);

@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
+
 import os from 'os'
 
 // arch in [arm, x32, x64...] (https://nodejs.org/api/os.html#os_os_arch)
@@ -58,7 +59,7 @@ export async function login(
 export async function logout(): Promise<void> {
   const logoutArgs: string[] = ['logout', '--service-account']
 
-  core.info(`Loggint out of Nucleus`)
+  core.info(`Logging out of Nucleus`)
 
   try {
     await exec.getExecOutput('nucleus', logoutArgs)
