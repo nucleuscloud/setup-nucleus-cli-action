@@ -193,7 +193,8 @@ function getDownloadUrl(version) {
             core.info('Necleus CLI version not set. Getting latest.');
             const args = [
                 'api',
-                '-H "Accept: application/vnd.github+json"',
+                '-H',
+                '"Accept: application/vnd.github+json"',
                 '/repos/nucleuscloud/cli/releases/latest'
             ];
             try {
@@ -211,8 +212,10 @@ function getDownloadUrl(version) {
                     cwd: './lib'
                 };
                 yield exec.getExecOutput('gh', args, options);
-                if (error !== "") {
-                    core.setFailed("Failed to get latest Nucleus CLI release");
+                if (error !== '') {
+                    // eslint-disable-next-line no-console
+                    console.log(`error: ${error}`);
+                    core.setFailed('Failed to get latest Nucleus CLI release');
                 }
                 const githubRelease = JSON.parse(output);
                 const latestVersion = githubRelease.tag_name;

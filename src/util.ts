@@ -32,7 +32,8 @@ export async function getDownloadUrl(version?: string): Promise<string> {
     core.info('Necleus CLI version not set. Getting latest.')
     const args: string[] = [
       'api',
-      '-H "Accept: application/vnd.github+json"',
+      '-H',
+      '"Accept: application/vnd.github+json"',
       '/repos/nucleuscloud/cli/releases/latest'
     ]
     try {
@@ -52,6 +53,8 @@ export async function getDownloadUrl(version?: string): Promise<string> {
       }
       await exec.getExecOutput('gh', args, options)
       if (error !== '') {
+        // eslint-disable-next-line no-console
+        console.log(`error: ${error}`)
         core.setFailed('Failed to get latest Nucleus CLI release')
       }
       const githubRelease: GithubReleaseResponse = JSON.parse(output)
