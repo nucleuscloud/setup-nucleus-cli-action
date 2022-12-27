@@ -51,6 +51,6 @@ export async function login(
     })
     core.info(`Login Succeeded!`)
   } catch (err) {
-    core.error(`Login Failed!`)
+    core.setFailed("Failed to login");
   }
 }
