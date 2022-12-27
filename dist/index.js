@@ -50,7 +50,9 @@ function run() {
             }
             const clientId = core.getInput('client_id');
             const clientSecret = core.getInput('client_secret');
-            core.setSecret(clientSecret);
+            if (clientSecret !== "") {
+                core.setSecret(clientSecret);
+            }
             const shouldLogout = core.getBooleanInput('logout');
             stateHelper.setLogout(shouldLogout);
             core.info(`Downloading Nucleus CLI`);

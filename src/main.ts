@@ -13,7 +13,9 @@ export async function run(): Promise<{version?: string}> {
     }
     const clientId: string = core.getInput('client_id')
     const clientSecret: string = core.getInput('client_secret')
-    core.setSecret(clientSecret)
+    if (clientSecret !== '') {
+      core.setSecret(clientSecret)
+    }
 
     const shouldLogout: boolean = core.getBooleanInput('logout')
     stateHelper.setLogout(shouldLogout)
