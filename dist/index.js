@@ -145,8 +145,7 @@ function login(clientId, clientSecret) {
         loginArgs.push('--client-id', clientId);
         core.info(`Logging into Nucleus`);
         try {
-            yield exec
-                .getExecOutput('nucleus', loginArgs, {
+            yield exec.getExecOutput('nucleus', loginArgs, {
                 ignoreReturnCode: true,
                 silent: true,
                 input: Buffer.from(clientSecret)

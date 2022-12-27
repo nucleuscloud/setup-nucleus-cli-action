@@ -22,7 +22,5 @@ jobs:
       - uses: ./
         with:
           version: 0.0.25
-          client_id: ${{ secrets.CLIENT_ID }}
-          client_secret: ${{ secrets.CLIENT_SECRET }}
       - name: 'Use nucleus CLI'
         run: 'nucleus -h'
