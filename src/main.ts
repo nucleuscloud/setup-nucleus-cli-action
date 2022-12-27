@@ -26,7 +26,6 @@ export async function run(): Promise<{version?: string}> {
     // Expose the tool by adding it to the PATH
     core.addPath(pathToCLI)
     await login(clientId, clientSecret)
-    core.saveState('isPost', true)
     return { version } 
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : "Failed to setup Nucleus CLI"
@@ -45,9 +44,9 @@ async function post(): Promise<void> {
 
 
 const isPost = !!core.getState('isPost')
-// if (isPost) {
-//   core.saveState('isPost', 'true');
-// }
+if (!isPost) {
+  core.saveState('isPost', 'true');
+}
 
 if (!isPost) {
     run()
