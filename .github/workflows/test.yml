@@ -20,10 +20,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
-        with:
-          version: 0.0.26
-          client_id: ${{ secrets.CLIENT_ID }}
-          client_secret: ${{ secrets.CLIENT_SECRET }}
-          logout: true
       - name: 'Use nucleus CLI'
         run: 'nucleus -h'
