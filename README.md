@@ -60,8 +60,9 @@ jobs:
 
 ### inputs
 
-| Name            | Type   | Required | Description                            |
-| --------------- | ------ | -------- | -------------------------------------- |
-| `version`       | String | false    | Nucleus CLI version                    |
-| `client_id`     | String | false    | Client id for logging into Nucleus     |
-| `client_secret` | String | false    | Client secret for logging into Nucleus |
+| Name            | Type    | Required | Description                            |
+| --------------- | ------- | -------- | -------------------------------------- |
+| `version`       | String  | false    | Nucleus CLI version                    |
+| `client_id`     | String  | false    | Client id for logging into Nucleus     |
+| `client_secret` | String  | false    | Client secret for logging into Nucleus |
+| `logout`        | boolean | false    | Logout from Nucleus at end of a job    |
