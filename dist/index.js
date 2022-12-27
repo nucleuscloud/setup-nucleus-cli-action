@@ -37,6 +37,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const stateHelper = __importStar(__nccwpck_require__(8647));
 const tc = __importStar(__nccwpck_require__(7784));
 const util_1 = __nccwpck_require__(4024);
 function run() {
@@ -44,8 +45,14 @@ function run() {
         try {
             // Get version of tool to be installed
             const version = core.getInput('version');
+            if (!version) {
+                core.setFailed('Nucleus CLI version missing');
+            }
             const clientId = core.getInput('client_id');
             const clientSecret = core.getInput('client_secret');
+            core.setSecret(clientSecret);
+            const shouldLogout = core.getBooleanInput('logout');
+            stateHelper.setLogout(shouldLogout);
             core.info(`Downloading Nucleus CLI`);
             // Download the specific version of the tool, e.g. as a tarball
             const pathToTarball = yield tc.downloadTool((0, util_1.getDownloadUrl)(version));
@@ -57,14 +64,67 @@ function run() {
             return { version };
         }
         catch (error) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
-            throw error;
+            const errMsg = error instanceof Error ? error.message : 'Failed to setup Nucleus CLI';
+            core.setFailed(errMsg);
         }
+        return {};
     });
 }
 exports.run = run;
-run();
+function post() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!stateHelper.Logout) {
+            return;
+        }
+        yield (0, util_1.logout)();
+    });
+}
+if (!stateHelper.IsPost) {
+    run();
+}
+else {
+    post();
+}
+
+
+/***/ }),
+
+/***/ 8647:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.setLogout = exports.Logout = exports.IsPost = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+exports.IsPost = !!process.env['STATE_isPost'];
+exports.Logout = /true/i.test(process.env['STATE_logout'] || '');
+function setLogout(logout) {
+    core.saveState('logout', logout);
+}
+exports.setLogout = setLogout;
+if (!exports.IsPost) {
+    core.saveState('isPost', 'true');
+}
 
 
 /***/ }),
@@ -106,7 +166,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.login = exports.getDownloadUrl = void 0;
+exports.logout = exports.login = exports.getDownloadUrl = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const os_1 = __importDefault(__nccwpck_require__(2087));
@@ -153,11 +213,25 @@ function login(clientId, clientSecret) {
             core.info(`Login Succeeded!`);
         }
         catch (err) {
-            core.error(`Login Failed!`);
+            core.setFailed('Failed to login');
         }
     });
 }
 exports.login = login;
+function logout() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const logoutArgs = ['logout', '--service-account'];
+        core.info(`Loggint out of Nucleus`);
+        try {
+            yield exec.getExecOutput('nucleus', logoutArgs);
+            core.info(`Logout Succeeded!`);
+        }
+        catch (err) {
+            core.setFailed('Failed to logout');
+        }
+    });
+}
+exports.logout = logout;
 
 
 /***/ }),
