@@ -62,7 +62,12 @@ export async function getDownloadUrl(version?: string): Promise<string> {
       //   const githubRelease: GithubReleaseResponse = JSON.parse(output)
       //   const latestVersion = githubRelease.tag_name
 
-      const http: httpm.HttpClient = new httpm.HttpClient()
+      const http: httpm.HttpClient = new httpm.HttpClient('http-client', [], {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      })
       const res: httpm.HttpClientResponse = await http.get(
         'https://api.github.com/repos/nucleuscloud/cli/releases/latest'
       )

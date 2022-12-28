@@ -223,7 +223,12 @@ function getDownloadUrl(version) {
                 //   }
                 //   const githubRelease: GithubReleaseResponse = JSON.parse(output)
                 //   const latestVersion = githubRelease.tag_name
-                const http = new httpm.HttpClient();
+                const http = new httpm.HttpClient('http-client', [], {
+                    headers: {
+                        Accept: 'application/vnd.github+json',
+                        'X-GitHub-Api-Version': '2022-11-28'
+                    }
+                });
                 const res = yield http.get('https://api.github.com/repos/nucleuscloud/cli/releases/latest');
                 const body = yield res.readBody();
                 const obj = JSON.parse(body);
