@@ -12,8 +12,8 @@ inputs:
     description: Client secret for Nucleus login
     required: false
   logout:
-    description: 'Log out from Nucleus at the end of a job'
-    default: 'true'
+    description: Log out from Nucleus at the end of a job
+    default: true
     required: false
 runs:
   using: node16

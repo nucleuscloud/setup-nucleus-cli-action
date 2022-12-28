@@ -17,7 +17,6 @@ export async function run(): Promise<{version?: string}> {
     const shouldLogout: boolean = core.getBooleanInput('logout')
     stateHelper.setLogout(shouldLogout)
 
-    core.info(`Downloading Nucleus CLI`)
     // Download the specific version of the tool, e.g. as a tarball
     const pathToTarball = await tc.downloadTool(await getDownloadUrl(version))
 
@@ -32,8 +31,8 @@ export async function run(): Promise<{version?: string}> {
     const errMsg =
       error instanceof Error ? error.message : 'Failed to setup Nucleus CLI'
     core.setFailed(errMsg)
+    throw error
   }
-  return {}
 }
 
 async function post(): Promise<void> {

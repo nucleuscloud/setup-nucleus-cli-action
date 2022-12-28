@@ -29,43 +29,42 @@ interface GithubReleaseResponse {
   name: string
 }
 
-export async function getDownloadUrl(version?: string): Promise<string> {
-  if (!version || version === '' || version === 'latest') {
-    core.info('Necleus CLI version not set. Getting latest.')
-
-    try {
-      const http: httpm.HttpClient = new httpm.HttpClient('http-client', [], {
-        headers: {
-          Accept: 'application/vnd.github+json',
-          'X-GitHub-Api-Version': '2022-11-28'
-        }
-      })
-      const res: httpm.HttpClientResponse = await http.get(
-        'https://api.github.com/repos/nucleuscloud/cli/releases/latest'
-      )
-      const body: string = await res.readBody()
-      const obj: GithubReleaseResponse = JSON.parse(body)
-      const v = obj.name || obj.tag_name
-      // eslint-disable-next-line no-console
-      console.log(`tage name: ${v}`)
-      const platform = os.platform()
-      const filename = `nucleus_${v.replace('v', '')}_${mapOS(
-        platform
-      )}_${mapArch(os.arch())}`
-      const extension = 'tar.gz'
-      // eslint-disable-next-line no-console
-      console.log(
-        `https://github.com/nucleuscloud/cli/releases/download/${v}/${filename}.${extension}`
-      )
-      return `https://github.com/nucleuscloud/cli/releases/download/${v}/${filename}.${extension}`
-    } catch (err) {
-      core.setFailed('Failed to get download latest Nucleus CLI')
-    }
-  }
+function getUrl(version: string): string {
   const platform = os.platform()
-  const filename = `nucleus_${version}_${mapOS(platform)}_${mapArch(os.arch())}`
+  const ops = mapOS(platform)
+  const arch = mapArch(os.arch())
+  const filename = `nucleus_${version}_${ops}_${arch}`
   const extension = 'tar.gz'
   return `https://github.com/nucleuscloud/cli/releases/download/v${version}/${filename}.${extension}`
+}
+
+export async function getDownloadUrl(version?: string): Promise<string> {
+  if (version && version !== '' && version !== 'latest') {
+    core.info(`Downloading Nucleus CLI version ${version}`)
+    return getUrl(version)
+  }
+
+  try {
+    const http: httpm.HttpClient = new httpm.HttpClient('http-client', [], {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
+    const res: httpm.HttpClientResponse = await http.get(
+      'https://api.github.com/repos/nucleuscloud/cli/releases/latest'
+    )
+    const body: string = await res.readBody()
+    const obj: GithubReleaseResponse = JSON.parse(body)
+    const latestVersion = obj.name || obj.tag_name
+
+    core.info(`Downloading latest Nucleus CLI version ${latestVersion}.`)
+
+    return getUrl(latestVersion.replace('v', ''))
+  } catch (err) {
+    core.setFailed('Failed to get download latest Nucleus CLI')
+    throw err
+  }
 }
 
 export async function login(
