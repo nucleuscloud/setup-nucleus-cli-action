@@ -209,7 +209,7 @@ function getDownloadUrl(version) {
                 // eslint-disable-next-line no-console
                 console.log(`tage name: ${v}`);
                 const platform = os_1.default.platform();
-                const filename = `nucleus_${v}_${mapOS(platform)}_${mapArch(os_1.default.arch())}`;
+                const filename = `nucleus_${v.replace('v', '')}_${mapOS(platform)}_${mapArch(os_1.default.arch())}`;
                 const extension = 'tar.gz';
                 // eslint-disable-next-line no-console
                 console.log(`https://github.com/nucleuscloud/cli/releases/download/${v}/${filename}.${extension}`);

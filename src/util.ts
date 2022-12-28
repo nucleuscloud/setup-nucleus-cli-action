@@ -48,7 +48,9 @@ export async function getDownloadUrl(version?: string): Promise<string> {
       // eslint-disable-next-line no-console
       console.log(`tage name: ${v}`)
       const platform = os.platform()
-      const filename = `nucleus_${v}_${mapOS(platform)}_${mapArch(os.arch())}`
+      const filename = `nucleus_${v.replace('v', '')}_${mapOS(
+        platform
+      )}_${mapArch(os.arch())}`
       const extension = 'tar.gz'
       // eslint-disable-next-line no-console
       console.log(
