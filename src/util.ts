@@ -32,36 +32,7 @@ export async function getDownloadUrl(version?: string): Promise<string> {
   if (!version || version === '' || version === 'latest') {
     core.info('Necleus CLI version not set. Getting latest.')
 
-    // const args: string[] = [
-    //   'api',
-    //   '-H',
-    //   '"Accept: application/vnd.github+json"',
-    //   '/repos/nucleuscloud/cli/releases/latest'
-    // ]
     try {
-      //   let output = ''
-      //   let error = ''
-
-      //   const options = {
-      //     listeners: {
-      //       stdout: (data: Buffer) => {
-      //         output += data.toString()
-      //       },
-      //       stderr: (data: Buffer) => {
-      //         error += data.toString()
-      //       }
-      //     },
-      //     cwd: './lib'
-      //   }
-      //   await exec.getExecOutput('gh', args, options)
-      //   if (error !== '') {
-      //     // eslint-disable-next-line no-console
-      //     console.log(`error: ${error}`)
-      //     core.setFailed('Failed to get latest Nucleus CLI release')
-      //   }
-      //   const githubRelease: GithubReleaseResponse = JSON.parse(output)
-      //   const latestVersion = githubRelease.tag_name
-
       const http: httpm.HttpClient = new httpm.HttpClient('http-client', [], {
         headers: {
           Accept: 'application/vnd.github+json',
@@ -73,13 +44,16 @@ export async function getDownloadUrl(version?: string): Promise<string> {
       )
       const body: string = await res.readBody()
       const obj = JSON.parse(body)
-
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(obj, undefined, 2))
       const v = obj.name
+      // eslint-disable-next-line no-console
+      console.log(`tage name: ${v}`)
       const platform = os.platform()
       const filename = `nucleus_${v}_${mapOS(platform)}_${mapArch(os.arch())}`
       const extension = 'tar.gz'
+      // eslint-disable-next-line no-console
+      console.log(
+        `https://github.com/nucleuscloud/cli/releases/download/${v}/${filename}.${extension}`
+      )
       return `https://github.com/nucleuscloud/cli/releases/download/${v}/${filename}.${extension}`
     } catch (err) {
       core.setFailed('Failed to get download latest Nucleus CLI')
