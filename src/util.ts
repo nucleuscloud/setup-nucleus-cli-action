@@ -68,8 +68,8 @@ export async function getDownloadUrl(version?: string): Promise<string> {
 }
 
 export async function login(
-  clientId: string,
-  clientSecret: string
+  clientId?: string,
+  clientSecret?: string
 ): Promise<void> {
   if (!clientId || !clientSecret) {
     core.info(`Missing client id and client secret. Skipping login.`)

@@ -2,31 +2,32 @@ import * as core from '@actions/core'
 import * as stateHelper from './state-helper'
 import * as tc from '@actions/tool-cache'
 
+import {Inputs, getInputs} from './context'
 import {getDownloadUrl, login, logout} from './util'
 
 export async function run(): Promise<{version?: string}> {
   try {
-    // Get version of tool to be installed
-    const version: string = core.getInput('version')
-    const clientId: string = core.getInput('client_id')
-    const clientSecret: string = core.getInput('client_secret')
-    if (clientSecret !== '') {
-      core.setSecret(clientSecret)
+    const inputs: Inputs = getInputs()
+    if (inputs.clientSecret && inputs.clientSecret !== '') {
+      core.setSecret(inputs.clientSecret)
     }
 
     const shouldLogout: boolean = core.getBooleanInput('logout')
     stateHelper.setLogout(shouldLogout)
 
     // Download the specific version of the tool, e.g. as a tarball
-    const pathToTarball = await tc.downloadTool(await getDownloadUrl(version))
+    const pathToTarball = await tc.downloadTool(
+      await getDownloadUrl(inputs.version)
+    )
 
     // Extract the tarball onto the runner
     const pathToCLI = await tc.extractTar(pathToTarball)
 
     // Expose the tool by adding it to the PATH
     core.addPath(pathToCLI)
-    await login(clientId, clientSecret)
-    return {version}
+    await login(inputs.clientId, inputs.clientSecret)
+
+    return {version: inputs.version}
   } catch (error) {
     const errMsg =
       error instanceof Error ? error.message : 'Failed to setup Nucleus CLI'
