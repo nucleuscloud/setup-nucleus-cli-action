@@ -15,7 +15,7 @@ After you've used the action, subsequent steps in the same job can run Nucleus c
 
 ### Nucleus CLI
 
-To only download Nucleus CLI and not authenticate with Nucleus pass in the CLI version only.
+Download Nucleus CLI and not authenticate with Nucleus.
 
 ```yaml
 name: ci
@@ -30,8 +30,6 @@ jobs:
     steps:
       - name: Download Nucleus CLI
         uses: nucleuscloud/setup-nucleus-cli-action@v1
-        with:
-          version: 0.0.26
 ```
 
 Set up a Nucleus service account in order to authenticate against Nucleus CLI.
@@ -60,9 +58,9 @@ jobs:
 
 ### inputs
 
-| Name            | Type    | Required | Description                            |
-| --------------- | ------- | -------- | -------------------------------------- |
-| `version`       | String  | false    | Nucleus CLI version                    |
-| `client_id`     | String  | false    | Client id for logging into Nucleus     |
-| `client_secret` | String  | false    | Client secret for logging into Nucleus |
-| `logout`        | boolean | false    | Logout from Nucleus at end of a job    |
+| Name            | Type    | Default | Required | Description                            |
+| --------------- | ------- | ------- | -------- | -------------------------------------- |
+| `version`       | String  | latest  | false    | Nucleus CLI version                    |
+| `client_id`     | String  |         | false    | Client id for logging into Nucleus     |
+| `client_secret` | String  |         | false    | Client secret for logging into Nucleus |
+| `logout`        | boolean | true    | false    | Logout from Nucleus at end of a job    |
