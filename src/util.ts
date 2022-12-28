@@ -24,9 +24,10 @@ function mapOS(ops: string): string {
   return mappings[ops] || ops
 }
 
-// interface GithubReleaseResponse {
-//   tag_name: string
-// }
+interface GithubReleaseResponse {
+  tag_name: string
+  name: string
+}
 
 export async function getDownloadUrl(version?: string): Promise<string> {
   if (!version || version === '' || version === 'latest') {
@@ -43,8 +44,8 @@ export async function getDownloadUrl(version?: string): Promise<string> {
         'https://api.github.com/repos/nucleuscloud/cli/releases/latest'
       )
       const body: string = await res.readBody()
-      const obj = JSON.parse(body)
-      const v = obj.name
+      const obj: GithubReleaseResponse = JSON.parse(body)
+      const v = obj.name || obj.tag_name
       // eslint-disable-next-line no-console
       console.log(`tage name: ${v}`)
       const platform = os.platform()

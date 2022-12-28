@@ -188,9 +188,6 @@ function mapOS(ops) {
     };
     return mappings[ops] || ops;
 }
-// interface GithubReleaseResponse {
-//   tag_name: string
-// }
 function getDownloadUrl(version) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!version || version === '' || version === 'latest') {
@@ -205,7 +202,7 @@ function getDownloadUrl(version) {
                 const res = yield http.get('https://api.github.com/repos/nucleuscloud/cli/releases/latest');
                 const body = yield res.readBody();
                 const obj = JSON.parse(body);
-                const v = obj.name;
+                const v = obj.name || obj.tag_name;
                 // eslint-disable-next-line no-console
                 console.log(`tage name: ${v}`);
                 const platform = os_1.default.platform();
