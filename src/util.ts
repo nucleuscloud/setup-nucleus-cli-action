@@ -82,7 +82,7 @@ export async function login(
   core.info(`Logging into Nucleus`)
 
   try {
-    await exec.getExecOutput('export', ['NUCLEUS_DEBUG_ENV=dev'])
+    await exec.getExecOutput('export', ['NUCLEUS_DEBUG_ENV=stage'])
     await exec.getExecOutput('nucleus', loginArgs, {
       ignoreReturnCode: false,
       silent: false,
