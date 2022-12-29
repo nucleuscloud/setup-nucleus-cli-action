@@ -7,7 +7,7 @@ import os from 'os'
 
 jest.mock('os')
 
-describe.skip('util.ts', () => {
+describe('util.ts', () => {
   let execSpy: jest.SpyInstance<Promise<exec.ExecOutput>>
   beforeEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -36,8 +36,8 @@ describe.skip('util.ts', () => {
       ['login', '--service-account', '--client-id', clientId],
       {
         input: Buffer.from(clientSecret),
-        silent: true,
-        ignoreReturnCode: true
+        silent: false,
+        ignoreReturnCode: false
       }
     )
   })
