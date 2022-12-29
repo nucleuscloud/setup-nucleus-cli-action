@@ -1,0 +1,7 @@
+cliVersion: nucleus-cli/v1alpha1
+spec:
+  image: ghcr.io/nucleuscloud/nodejs-sample:v0.0.2
+  serviceName: nodejs-sample
+  serviceRuntime: docker
+  vars:
+    DEFAULT_NAME: World
