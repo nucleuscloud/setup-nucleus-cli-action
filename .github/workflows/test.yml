@@ -19,6 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: set nucleus debug env
+        id: debug
+        run: |
+          echo "NUCLEUS_DEBUG_ENV=stage" >> $GITHUB_ENV
       - uses: ./
         with:
           version: 0.0.27

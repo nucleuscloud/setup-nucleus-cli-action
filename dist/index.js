@@ -270,8 +270,6 @@ function login(clientId, clientSecret) {
         loginArgs.push('--client-id', clientId);
         core.info(`Logging into Nucleus`);
         try {
-            yield exec.exec('export NUCLEUS_DEBUG_ENV=stage');
-            core.info('set nucleus debug env ');
             yield exec.getExecOutput('nucleus', loginArgs, {
                 ignoreReturnCode: false,
                 silent: false,
