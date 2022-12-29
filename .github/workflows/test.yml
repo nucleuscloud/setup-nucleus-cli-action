@@ -25,4 +25,4 @@ jobs:
           client_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
       - name: 'Use nucleus CLI'
-        run: 'nucleus deploy -env acme2'
+        run: 'NUCLEUS_DEBUG_ENV=stage nucleus deploy -env acme2'

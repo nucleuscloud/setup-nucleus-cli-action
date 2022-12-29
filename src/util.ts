@@ -82,13 +82,13 @@ export async function login(
   core.info(`Logging into Nucleus`)
 
   try {
+    await exec.getExecOutput('export', ['NUCLEUS_DEBUG_ENV=dev'])
     await exec.getExecOutput('nucleus', loginArgs, {
       ignoreReturnCode: false,
       silent: false,
       input: Buffer.from(clientSecret)
     })
 
-    await exec.getExecOutput('ls', ['-a'])
     core.info(`Login Succeeded!`)
   } catch (err) {
     core.setFailed('Failed to login')
