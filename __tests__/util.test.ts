@@ -7,7 +7,7 @@ import os from 'os'
 
 jest.mock('os')
 
-describe('util.ts', () => {
+describe.skip('util.ts', () => {
   let execSpy: jest.SpyInstance<Promise<exec.ExecOutput>>
   beforeEach(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

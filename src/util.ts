@@ -83,10 +83,12 @@ export async function login(
 
   try {
     await exec.getExecOutput('nucleus', loginArgs, {
-      ignoreReturnCode: true,
-      silent: true,
+      ignoreReturnCode: false,
+      silent: false,
       input: Buffer.from(clientSecret)
     })
+
+    await exec.getExecOutput('ls', ['-a'])
     core.info(`Login Succeeded!`)
   } catch (err) {
     core.setFailed('Failed to login')

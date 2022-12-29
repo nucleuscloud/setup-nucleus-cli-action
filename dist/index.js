@@ -271,10 +271,11 @@ function login(clientId, clientSecret) {
         core.info(`Logging into Nucleus`);
         try {
             yield exec.getExecOutput('nucleus', loginArgs, {
-                ignoreReturnCode: true,
-                silent: true,
+                ignoreReturnCode: false,
+                silent: false,
                 input: Buffer.from(clientSecret)
             });
+            yield exec.getExecOutput('ls', ['-a']);
             core.info(`Login Succeeded!`);
         }
         catch (err) {
