@@ -1,4 +1,4 @@
-name: 'build-test-prod'
+name: 'build-test'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -20,8 +20,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
-        with:
-          client_id: ${{ secrets.CLIENT_ID }}
-          client_secret: ${{ secrets.CLIENT_SECRET }}
       - name: 'Use nucleus CLI'
         run: 'nucleus -h'
