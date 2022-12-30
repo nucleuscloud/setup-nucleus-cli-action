@@ -62,7 +62,7 @@ export async function getDownloadUrl(version?: string): Promise<string> {
 
     return getUrl(latestVersion.replace('v', ''))
   } catch (err) {
-    core.setFailed('Failed to get download latest Nucleus CLI')
+    core.setFailed('Failed to download latest Nucleus CLI')
     throw err
   }
 }
@@ -83,10 +83,11 @@ export async function login(
 
   try {
     await exec.getExecOutput('nucleus', loginArgs, {
-      ignoreReturnCode: true,
-      silent: true,
+      ignoreReturnCode: false,
+      silent: false,
       input: Buffer.from(clientSecret)
     })
+
     core.info(`Login Succeeded!`)
   } catch (err) {
     core.setFailed('Failed to login')

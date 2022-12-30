@@ -254,7 +254,7 @@ function getDownloadUrl(version) {
             return getUrl(latestVersion.replace('v', ''));
         }
         catch (err) {
-            core.setFailed('Failed to get download latest Nucleus CLI');
+            core.setFailed('Failed to download latest Nucleus CLI');
             throw err;
         }
     });
@@ -271,8 +271,8 @@ function login(clientId, clientSecret) {
         core.info(`Logging into Nucleus`);
         try {
             yield exec.getExecOutput('nucleus', loginArgs, {
-                ignoreReturnCode: true,
-                silent: true,
+                ignoreReturnCode: false,
+                silent: false,
                 input: Buffer.from(clientSecret)
             });
             core.info(`Login Succeeded!`);

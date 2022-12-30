@@ -36,8 +36,8 @@ describe('util.ts', () => {
       ['login', '--service-account', '--client-id', clientId],
       {
         input: Buffer.from(clientSecret),
-        silent: true,
-        ignoreReturnCode: true
+        silent: false,
+        ignoreReturnCode: false
       }
     )
   })
