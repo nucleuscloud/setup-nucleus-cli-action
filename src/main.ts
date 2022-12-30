@@ -26,7 +26,6 @@ export async function run(): Promise<{version?: string}> {
     // Expose the tool by adding it to the PATH
     core.addPath(pathToCLI)
     await login(inputs.clientId, inputs.clientSecret)
-
     return {version: inputs.version}
   } catch (error) {
     const errMsg =
