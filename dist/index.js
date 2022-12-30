@@ -254,7 +254,7 @@ function getDownloadUrl(version) {
             return getUrl(latestVersion.replace('v', ''));
         }
         catch (err) {
-            core.setFailed('Failed to get download latest Nucleus CLI');
+            core.setFailed('Failed to download latest Nucleus CLI');
             throw err;
         }
     });
