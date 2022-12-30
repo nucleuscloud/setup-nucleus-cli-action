@@ -15,17 +15,7 @@ jobs:
           npm install
       - run: |
           npm run all
-  # test-prod:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: ./
-  #       with:
-  #         client_id: ${{ secrets.CLIENT_ID }}
-  #         client_secret: ${{ secrets.CLIENT_SECRET }}
-  #     - name: 'Use nucleus CLI'
-  #       run: 'nucleus -h'
-  test-stage:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,6 +25,7 @@ jobs:
           echo "NUCLEUS_DEBUG_ENV=stage" >> $GITHUB_ENV
       - uses: ./
         with:
+          version: 0.0.27
           client_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
       - name: 'Use nucleus CLI'
