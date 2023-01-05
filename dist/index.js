@@ -266,6 +266,9 @@ function getDownloadUrl(version) {
             const body = yield res.readBody();
             const obj = JSON.parse(body);
             const latestVersion = obj.name || obj.tag_name;
+            if (!latestVersion) {
+                core.setFailed("failed to retrieve latest release");
+            }
             core.info(`Downloading latest Nucleus CLI version ${latestVersion}.`);
             return getUrl(latestVersion.replace('v', ''));
         }
