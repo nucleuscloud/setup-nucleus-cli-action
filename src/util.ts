@@ -58,7 +58,6 @@ export async function getDownloadUrl(version?: string): Promise<string> {
     const obj: GithubReleaseResponse = JSON.parse(body)
     const latestVersion = obj.name || obj.tag_name
     if (!latestVersion) {
-      core.info(JSON.stringify(obj, undefined, 2))
       core.setFailed("failed to retrieve latest release")
     }
 
