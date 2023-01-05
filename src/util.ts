@@ -56,8 +56,11 @@ export async function getDownloadUrl(version?: string): Promise<string> {
     )
     const body: string = await res.readBody()
     const obj: GithubReleaseResponse = JSON.parse(body)
-    console.log(JSON.stringify(obj, undefined, 2))
     const latestVersion = obj.name || obj.tag_name
+    if (!latestVersion) {
+      core.info(JSON.stringify(obj, undefined, 2))
+      core.setFailed("failed to retrieve latest release")
+    }
 
     core.info(`Downloading latest Nucleus CLI version ${latestVersion}.`)
 
