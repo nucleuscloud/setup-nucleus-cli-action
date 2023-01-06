@@ -1,7 +1,7 @@
 name: Publish GitHub Release
 
 permissions:
-  contents: write # for creating a release and uploading release artifacts
+  contents: write
 
 on:
   push:
