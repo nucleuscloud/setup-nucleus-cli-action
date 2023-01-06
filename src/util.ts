@@ -52,11 +52,12 @@ export async function getDownloadUrl(version?: string): Promise<string> {
       }
     })
     const res: httpm.HttpClientResponse = await http.get(
-      'https://api.github.com/repos/nucleuscloud/cli/releases/latest'
+      'https://api.github.com/repos/nucleuscloud/cli/releases?per_page=1'
     )
     const body: string = await res.readBody()
-    const obj: GithubReleaseResponse = JSON.parse(body)
-    const latestVersion = obj.name || obj.tag_name
+    const releases: GithubReleaseResponse[] = JSON.parse(body)
+    const latestRelease = releases[0]
+    const latestVersion = latestRelease.tag_name || latestRelease.name
     if (!latestVersion) {
       core.setFailed('failed to retrieve latest release')
     }
@@ -93,7 +94,7 @@ export async function login(
 
     core.info(`Login Succeeded!`)
   } catch (err) {
-    core.setFailed('Failed to login')
+    core.setFailed('Fit failed to login')
   }
 }
 
