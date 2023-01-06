@@ -94,7 +94,7 @@ export async function login(
 
     core.info(`Login Succeeded!`)
   } catch (err) {
-    core.setFailed('Fit failed to login')
+    core.setFailed('Failed to login')
   }
 }
 
