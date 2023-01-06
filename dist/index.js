@@ -262,10 +262,11 @@ function getDownloadUrl(version) {
                     'X-GitHub-Api-Version': '2022-11-28'
                 }
             });
-            const res = yield http.get('https://api.github.com/repos/nucleuscloud/cli/releases/latest');
+            const res = yield http.get('https://api.github.com/repos/nucleuscloud/cli/releases?per_page=1');
             const body = yield res.readBody();
-            const obj = JSON.parse(body);
-            const latestVersion = obj.name || obj.tag_name;
+            const releases = JSON.parse(body);
+            const latestRelease = releases[0];
+            const latestVersion = latestRelease.tag_name || latestRelease.name;
             if (!latestVersion) {
                 core.setFailed('failed to retrieve latest release');
             }
